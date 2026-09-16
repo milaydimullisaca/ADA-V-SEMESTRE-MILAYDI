@@ -1,0 +1,37 @@
+#include <iostream>
+using namespace std;
+
+double evaluar(double coef[], int N, double x) {
+    double resultado = 0;
+    double potencia = 1;
+
+    for (int i = N; i >= 0; i--) {
+        resultado = resultado + coef[i] * potencia;
+        potencia = potencia * x;
+    }
+
+    return resultado;
+}
+
+int main() {
+    int N;
+    double x;
+
+    cout << "Ingrese el grado del polinomio: ";
+    cin >> N;
+
+    double coef[N + 1];
+
+    cout << "Ingrese los coeficientes"<<endl;
+
+    for (int i = 0; i <= N; i++) {
+        cin >> coef[i];
+    }
+
+    cout << "Ingrese el valor de x: ";
+    cin >> x;
+
+    cout << "P(" << x << ") = " << evaluar(coef, N, x) << endl;
+
+    return 0;
+}
