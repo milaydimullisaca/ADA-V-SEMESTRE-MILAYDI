@@ -1,32 +1,32 @@
-#include <iostream>
-using namespace std;
+#include <stdio.h>
 
-double potencia(double x, int y) {
-    double t;
-
-    if (y == 0) {
-        return 1;
+double evaluar(double coef[], int N, double x) {
+    if (N == 0) {
+        return coef[0];
     }
 
-    if (y % 2 == 1) {
-        return x * potencia(x, y - 1);
-    } else {
-        t = potencia(x, y / 2);
-        return t * t;
-    }
+    return coef[N] + x * evaluar(coef, N - 1, x);
 }
 
 int main() {
+    int N;
     double x;
-    int y;
 
-    cout << "Ingrese la base x: ";
-    cin >> x;
+    printf("Ingrese el grado del polinomio: ");
+    scanf("%d", &N);
 
-    cout << "Ingrese el exponente y: ";
-    cin >> y;
+    double coef[N + 1];
 
-    cout << x << "^" << y << " = " << potencia(x, y) << endl;
+    printf("Ingrese los coeficientes:\n");
+
+    for (int i = 0; i <= N; i++) {
+        scanf("%lf", &coef[i]);
+    }
+
+    printf("Ingrese el valor de x: ");
+    scanf("%lf", &x);
+
+    printf("P(%.2f) = %.2f\n", x, evaluar(coef, N, x));
 
     return 0;
 }
