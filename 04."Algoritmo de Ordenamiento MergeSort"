@@ -1,42 +1,7 @@
 #include <stdio.h>
 
-void mezclar(int A[], int inicio, int medio, int fin) {
-    int i = inicio;
-    int j = medio + 1;
-    int k = 0;
-
-    int temp[fin - inicio + 1];
-
-    while (i <= medio && j <= fin) {
-        if (A[i] <= A[j]) {
-            temp[k] = A[i];
-            i++;
-        } else {
-            temp[k] = A[j];
-            j++;
-        }
-        k++;
-    }
-
-    while (i <= medio) {
-        temp[k] = A[i];
-        i++;
-        k++;
-    }
-
-    while (j <= fin) {
-        temp[k] = A[j];
-        j++;
-        k++;
-    }
-
-    for (i = inicio, k = 0; i <= fin; i++, k++) {
-        A[i] = temp[k];
-    }
-}
-
 void mergeSort(int A[], int inicio, int fin) {
-    int medio;
+    int i, j, k, medio, aux[100];
 
     if (inicio < fin) {
         medio = (inicio + fin) / 2;
@@ -44,7 +9,36 @@ void mergeSort(int A[], int inicio, int fin) {
         mergeSort(A, inicio, medio);
         mergeSort(A, medio + 1, fin);
 
-        mezclar(A, inicio, medio, fin);
+        i = inicio;
+        j = medio + 1;
+        k = inicio;
+
+        while (i <= medio && j <= fin) {
+            if (A[i] < A[j]) {
+                aux[k] = A[i];
+                i++;
+            } else {
+                aux[k] = A[j];
+                j++;
+            }
+            k++;
+        }
+
+        while (i <= medio) {
+            aux[k] = A[i];
+            i++;
+            k++;
+        }
+
+        while (j <= fin) {
+            aux[k] = A[j];
+            j++;
+            k++;
+        }
+
+        for (i = inicio; i <= fin; i++) {
+            A[i] = aux[i];
+        }
     }
 }
 
@@ -52,21 +46,13 @@ int main() {
     int lista[] = {38, 27, 43, 3, 9, 82, 10};
     int N = sizeof(lista) / sizeof(lista[0]);
 
-    printf("Antes: ");
-
-    for (int i = 0; i < N; i++) {
-        printf("%d ", lista[i]);
-    }
-
     mergeSort(lista, 0, N - 1);
 
-    printf("\nOrdenado: ");
+    printf("Ordenado: ");
 
     for (int i = 0; i < N; i++) {
         printf("%d ", lista[i]);
     }
-
-    printf("\n");
 
     return 0;
 }
