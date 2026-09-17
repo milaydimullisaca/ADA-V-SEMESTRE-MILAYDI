@@ -1,0 +1,36 @@
+#include <stdio.h>
+
+void seleccion(int A[], int N) {
+    int i, j, menor, aux;
+
+    for (i = 0; i < N - 1; i++) {
+        menor = i;
+
+        for (j = i + 1; j < N; j++) {
+            if (A[j] < A[menor]) {
+                menor = j;
+            }
+        }
+
+        aux = A[i];
+        A[i] = A[menor];
+        A[menor] = aux;
+    }
+}
+
+int main() {
+    int lista[] = {4, 2, 9, 1, 5, 3};
+    int N = sizeof(lista) / sizeof(lista[0]);
+
+    seleccion(lista, N);
+
+    printf("Ordenado: ");
+
+    for (int i = 0; i < N; i++) {
+        printf("%d ", lista[i]);
+    }
+
+    printf("\n");
+
+    return 0;
+}
