@@ -1,5 +1,4 @@
-#include <iostream>
-using namespace std;
+#include <stdio.h>
 
 double evaluar(double coef[], int N, double x) {
     double resultado = 0;
@@ -17,21 +16,21 @@ int main() {
     int N;
     double x;
 
-    cout << "Ingrese el grado del polinomio: ";
-    cin >> N;
+    printf("Ingrese el grado del polinomio: ");
+    scanf("%d", &N);
 
     double coef[N + 1];
 
-    cout << "Ingrese los coeficientes"<<endl;
+    printf("Ingrese los coeficientes:\n");
 
     for (int i = 0; i <= N; i++) {
-        cin >> coef[i];
+        scanf("%lf", &coef[i]);
     }
 
-    cout << "Ingrese el valor de x: ";
-    cin >> x;
+    printf("Ingrese el valor de x: ");
+    scanf("%lf", &x);
 
-    cout << "P(" << x << ") = " << evaluar(coef, N, x) << endl;
+    printf("P(%.2f) = %.2f\n", x, evaluar(coef, N, x));
 
     return 0;
 }
