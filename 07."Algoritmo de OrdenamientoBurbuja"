@@ -1,0 +1,32 @@
+#include <stdio.h>
+
+void burbuja(int A[], int N) {
+    int i, j, aux;
+
+    for (i = 0; i < N - 1; i++) {
+        for (j = 0; j < N - 1 - i; j++) {
+            if (A[j] > A[j + 1]) {
+                aux = A[j];
+                A[j] = A[j + 1];
+                A[j + 1] = aux;
+            }
+        }
+    }
+}
+
+int main() {
+    int lista[] = {4, 2, 9, 1, 5, 3};
+    int N = sizeof(lista) / sizeof(lista[0]);
+
+    burbuja(lista, N);
+
+    printf("Ordenado: ");
+
+    for (int i = 0; i < N; i++) {
+        printf("%d ", lista[i]);
+    }
+
+    printf("\n");
+
+    return 0;
+}
