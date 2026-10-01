@@ -1,0 +1,80 @@
+#include <stdio.h>
+
+void mergeSort(int A[], int inicio, int fin) {
+    int i, j, k, medio, aux[100];
+
+    if (inicio < fin) {
+        medio = (inicio + fin) / 2;
+
+        mergeSort(A, inicio, medio);
+        mergeSort(A, medio + 1, fin);
+
+        i = inicio;
+        j = medio + 1;
+        k = inicio;
+
+        while (i <= medio && j <= fin) {
+            if (A[i] < A[j]) {
+                aux[k] = A[i];
+                i++;
+            } else {
+                aux[k] = A[j];
+                j++;
+            }
+            k++;
+        }
+
+        while (i <= medio) {
+            aux[k] = A[i];
+            i++;
+            k++;
+        }
+
+        while (j <= fin) {
+            aux[k] = A[j];
+            j++;
+            k++;
+        }
+
+        for (i = inicio; i <= fin; i++) {
+            A[i] = aux[i];
+        }
+    }
+}
+
+void mayorMenor(int A[], int N) {
+    int menor = A[0];
+    int mayor = A[0];
+
+    for (int i = 1; i < N; i++) {
+        if (A[i] < menor) {
+            menor = A[i];
+        }
+
+        if (A[i] > mayor) {
+            mayor = A[i];
+        }
+    }
+
+    printf("Menor numero: %d\n", menor);
+    printf("Mayor numero: %d\n", mayor);
+}
+
+int main() {
+    int lista[] = {1, 3, 10, 5, 4, 0, 7, 6, 11, 29};
+    int N = sizeof(lista) / sizeof(lista[0]);
+
+    mergeSort(lista, 0, N - 1);
+
+    printf("Ordenado: ");
+
+    for (int i = 0; i < N; i++) {
+        printf("%d ", lista[i]);
+    }
+
+    printf("\n");
+
+    mayorMenor(lista, N);
+
+    return 0;
+}
