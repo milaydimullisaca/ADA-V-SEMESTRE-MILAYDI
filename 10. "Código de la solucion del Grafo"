@@ -1,0 +1,71 @@
+#include <iostream>
+using namespace std;
+
+const int N = 6;
+const int INF = 9999;
+
+int grafo[N][N] = {
+    {0, 10, INF, 30, 45, INF},
+    {10, 0, 50, INF, 40, 25},
+    {INF, 50, 0, INF, 35, 15},
+    {30, INF, INF, 0, INF, 20},
+    {45, 40, 35, INF, 0, 55},
+    {INF, 25, 15, 20, 55, 0}
+};
+
+int minimo = INF;
+int maximo = 0;
+
+void buscarCaminos(int actual, int destino, int costo, bool visitado[]) {
+
+    if (actual == destino) {
+
+        if (costo < minimo) {
+            minimo = costo;
+        }
+
+        if (costo > maximo) {
+            maximo = costo;
+        }
+
+        return;
+    }
+
+    visitado[actual] = true;
+
+    for (int siguiente = 0; siguiente < N; siguiente++) {
+
+        if (grafo[actual][siguiente] != INF &&
+            !visitado[siguiente]) {
+
+            buscarCaminos(
+                siguiente,
+                destino,
+                costo + grafo[actual][siguiente],
+                visitado
+            );
+        }
+    }
+
+    visitado[actual] = false;
+}
+
+int main() {
+
+    int inicio = 0;
+    int destino = 2;
+
+    bool visitado[N] = {false};
+
+    buscarCaminos(
+        inicio,
+        destino,
+        0,
+        visitado
+    );
+
+    cout << "Tiempo minimo: " << minimo << endl;
+    cout << "Tiempo maximo: " << maximo << endl;
+
+    return 0;
+}
