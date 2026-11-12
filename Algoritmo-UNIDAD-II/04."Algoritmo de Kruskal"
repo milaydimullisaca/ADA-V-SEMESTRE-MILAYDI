@@ -1,0 +1,154 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+struct Arista {
+    int origen;
+    int destino;
+    int peso;
+};
+
+// Estructura para conjuntos disjuntos
+class UnionFind {
+private:
+    vector<int> padre;
+    vector<int> rango;
+
+public:
+    UnionFind(int n) {
+        padre.resize(n);
+        rango.resize(n, 0);
+
+        for (int i = 0; i < n; i++) {
+            padre[i] = i;
+        }
+    }
+
+    // Buscar el representante de un conjunto
+    int buscar(int x) {
+        if (padre[x] != x) {
+            padre[x] = buscar(padre[x]);
+        }
+
+        return padre[x];
+    }
+
+    // Unir dos conjuntos
+    bool unir(int x, int y) {
+        int raizX = buscar(x);
+        int raizY = buscar(y);
+
+        if (raizX == raizY) {
+            return false;
+        }
+
+        if (rango[raizX] < rango[raizY]) {
+            padre[raizX] = raizY;
+        } else if (rango[raizX] > rango[raizY]) {
+            padre[raizY] = raizX;
+        } else {
+            padre[raizY] = raizX;
+            rango[raizX]++;
+        }
+
+        return true;
+    }
+};
+
+// Ordenar las aristas por peso ascendente
+bool comparar(Arista a, Arista b) {
+    return a.peso < b.peso;
+}
+
+int main() {
+    int V, E;
+
+    cout << "===== ARBOL DE EXPANSION MINIMA =====\n";
+
+    cout << "Ingrese la cantidad de vertices: ";
+    cin >> V;
+
+    if (V <= 0) {
+        cout << "Cantidad de vertices no valida.\n";
+        return 1;
+    }
+
+    cout << "Ingrese la cantidad de aristas: ";
+    cin >> E;
+
+    if (E < 0) {
+        cout << "Cantidad de aristas no valida.\n";
+        return 1;
+    }
+
+    vector<Arista> aristas(E);
+
+    // Ingresar las aristas del grafo
+    for (int i = 0; i < E; i++) {
+        cout << "\nArista " << i + 1 << endl;
+
+        cout << "Vertice de origen: ";
+        cin >> aristas[i].origen;
+
+        cout << "Vertice de destino: ";
+        cin >> aristas[i].destino;
+
+        cout << "Peso: ";
+        cin >> aristas[i].peso;
+
+        if (aristas[i].origen < 0 ||
+            aristas[i].origen >= V ||
+            aristas[i].destino < 0 ||
+            aristas[i].destino >= V ||
+            aristas[i].origen == aristas[i].destino) {
+
+            cout << "Datos de arista no validos.\n";
+            return 1;
+        }
+    }
+
+    // Ordenar las aristas por peso
+    sort(aristas.begin(), aristas.end(), comparar);
+
+    UnionFind uf(V);
+
+    int pesoTotal = 0;
+    int seleccionadas = 0;
+
+    cout << "\n===== ARISTAS DEL MST =====\n";
+
+    // Aplicar algoritmo de Kruskal
+    for (int i = 0; i < E; i++) {
+
+        int u = aristas[i].origen;
+        int v = aristas[i].destino;
+        int peso = aristas[i].peso;
+
+        // Seleccionar si no forma un ciclo
+        if (uf.unir(u, v)) {
+
+            cout << u << " -- " << v
+                 << " | Peso: " << peso << endl;
+
+            pesoTotal += peso;
+            seleccionadas++;
+
+            if (seleccionadas == V - 1) {
+                break;
+            }
+        }
+    }
+
+    // Verificar si el grafo es conexo
+    if (seleccionadas != V - 1) {
+        cout << "\nEl grafo no es conexo.\n";
+        cout << "No existe un arbol de expansion "
+             << "minima para todos los vertices.\n";
+    } else {
+        cout << "\nPeso total del MST: "
+             << pesoTotal << endl;
+    }
+
+    return 0;
+}
