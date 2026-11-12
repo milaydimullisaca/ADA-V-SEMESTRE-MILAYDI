@@ -1,0 +1,107 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <iomanip>
+using namespace std;
+
+struct Objeto {
+    int id;
+    double peso;
+    double valor;
+    double relacion;
+};
+
+bool comparar(Objeto a, Objeto b) {
+    return a.relacion > b.relacion;
+}
+
+int main() {
+    int n;
+    double capacidad;
+
+    cout << "===== FRACTIONAL KNAPSACK =====\n";
+
+    cout << "Ingrese la cantidad de objetos: ";
+    cin >> n;
+
+    if (n <= 0) {
+        cout << "Cantidad de objetos no valida.\n";
+        return 1;
+    }
+
+    vector<Objeto> objetos(n);
+
+    for (int i = 0; i < n; i++) {
+        objetos[i].id = i + 1;
+
+        cout << "\nObjeto " << i + 1 << endl;
+
+        cout << "Ingrese el peso: ";
+        cin >> objetos[i].peso;
+
+        cout << "Ingrese el valor: ";
+        cin >> objetos[i].valor;
+
+        if (objetos[i].peso <= 0 || objetos[i].valor < 0) {
+            cout << "Peso o valor no valido.\n";
+            return 1;
+        }
+
+        objetos[i].relacion =
+            objetos[i].valor / objetos[i].peso;
+    }
+
+    cout << "\nIngrese la capacidad de la mochila: ";
+    cin >> capacidad;
+
+    if (capacidad < 0) {
+        cout << "Capacidad no valida.\n";
+        return 1;
+    }
+
+    // Ordenar objetos por valor/peso de mayor a menor
+    sort(objetos.begin(), objetos.end(), comparar);
+
+    double pesoTotal = 0;
+    double valorTotal = 0;
+
+    cout << "\n===== SELECCION DE OBJETOS =====\n";
+
+    for (int i = 0; i < n; i++) {
+        if (capacidad == 0) {
+            break;
+        }
+
+        double pesoTomado;
+        double fraccion;
+
+        if (objetos[i].peso <= capacidad) {
+            pesoTomado = objetos[i].peso;
+            fraccion = 1.0;
+        } else {
+            pesoTomado = capacidad;
+            fraccion = capacidad / objetos[i].peso;
+        }
+
+        double valorObtenido =
+            objetos[i].valor * fraccion;
+
+        capacidad -= pesoTomado;
+        pesoTotal += pesoTomado;
+        valorTotal += valorObtenido;
+
+        cout << fixed << setprecision(2);
+
+        cout << "Objeto " << objetos[i].id
+             << ": peso utilizado = " << pesoTomado
+             << ", fraccion = " << fraccion
+             << ", valor obtenido = " << valorObtenido
+             << endl;
+    }
+
+    cout << "\n===== RESULTADO FINAL =====\n";
+    cout << "Peso utilizado: " << pesoTotal << endl;
+    cout << "Valor maximo obtenido: " << valorTotal << endl;
+
+    return 0;
+}
